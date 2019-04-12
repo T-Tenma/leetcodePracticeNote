@@ -1,2 +1,2 @@
-# leetcodePricticeNote
+# leetcodePracticeNote
 自己的leetcode学习笔记
