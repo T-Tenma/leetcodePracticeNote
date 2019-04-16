@@ -53,19 +53,26 @@ public class Practice002 {
      * @return
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        //1、检查参数完整性
         if (l1 == null && l2 == null) {
             throw new IllegalArgumentException("Invalid paramter!");
         }
+        //2、考虑2种特殊情况
         if (l1 == null) {
             return l2;
         }
         if (l2 == null) {
             return l1;
         }
+        //这题的第一个难点主要在于如何保存首个节点的地址
+        //或者说引用，这里参考解决方案通过一个临时变量resutl来保存
         ListNode result = new ListNode(0);
+        //curr会不断的迁移位置或者说“指针”通过curr来实现node之间的串联
         ListNode curr = result;
+        //rate作为2位数相加是否超过10的记录
         int rate = 0;
         do {
+            //由于2个链表长度可能不一致，所以需要再次做非空判断
             int val;
             if (l1 == null) {
                 val = l2.val;
@@ -74,9 +81,11 @@ public class Practice002 {
             } else {
                 val = l1.val + l2.val;
             }
+            //这里其实加等rate也行
             if (rate > 0) {
                 val += 1;
             }
+            //超过10的就存放余数如11就存1，否则就存放val，并对rate重新赋值
             if (val >= 10) {
                 curr.next = new ListNode(val % 10);
                 rate = 1;
@@ -84,13 +93,17 @@ public class Practice002 {
                 curr.next = new ListNode(val);
                 rate = 0;
             }
+            //迁移“指针”位置，将链表向下迁移，并对l1和l2做非空判断
             curr = curr.next;
             l1 = l1 == null ? null : l1.next;
             l2 = l2 == null ? null : l2.next;
         } while (l1 != null || l2 != null);
+        //参考解决方案，考虑到可能链表循环完后，rate仍大于0，所以需要将这位数存下来
+        //例[0,9][1,9] 结果应该为[1,8,1]
         if (rate > 0) {
             curr.next = new ListNode(rate);
         }
+        //返回临时变量保存的引用
         return result.next;
     }
 
@@ -108,8 +121,10 @@ public class Practice002 {
         ListNode listNode = practice002.addTwoNumbers(l1, l2);
         while (listNode != null) {
             System.out.print(listNode.val);
-            System.out.print("->");
             listNode = listNode.next;
+            if (listNode != null) {
+                System.out.print("->");
+            }
         }
     }
 }
